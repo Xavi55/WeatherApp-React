@@ -2,7 +2,7 @@
   "name": "react-weather-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://kevingamez.tk/ReactWeatherApp/",
+  "homepage": "https://kevingamez.tk/WeatherApp-React/",
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "chart.js": "^2.7.3",
