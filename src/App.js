@@ -38,6 +38,8 @@ const styles = {
   }
 };
 
+const day = {0:'Sun',1:'Mon',2:'Tues',3:'Wends',4:'Thurs',5:'Fri',6:'Sat'};
+
 class App extends React.Component {
   constructor() {
     super();
@@ -104,7 +106,7 @@ class App extends React.Component {
             currTemp:res.main.temp,
             currHigh:res.main.temp_max,
             currLow:res.main.temp_min,
-            currState:"There's "+res.weather[0].main+'.'
+            currState:res.weather[0].main
           });
 
         })
@@ -147,20 +149,20 @@ class App extends React.Component {
 
   procData(data)
   {
-    let count=1;
-    let dat = {};
+    let count=0;
+    let castData = {};
     for(var x in data.list)
     {
+      //console.log(data.list[x]);
+
       if(parseInt(data.list[x].dt_txt[11]+data.list[x].dt_txt[12])===12)
       {
-        dat[count] = data.list[x].main.temp
-        //dat[data.list[x].main.temp]);
-        //console.log(data.list[x]);
+        castData[day[count]] = data.list[x].main.temp
         count++;
       }
     }
-    this.setState({chartData:[{'name':'Temp','data':dat}],days:dat});        
-    console.log(this.state.chartData);
+    this.setState({chartData:[{'name':'Temp','data':castData}],days:castData});    
+    //console.log(this.state.chartData);
   }
 
   componentWillMount()
@@ -171,8 +173,14 @@ class App extends React.Component {
   render() {
     const { classes } = this.props;
 
-    const day = {0:'Sun',1:'Mon',2:'Tues',3:'Wends',4:'Thurs',5:'Fri',6:'Sat'};
-    let d = new Date().getDay();
+    let greet = '';
+    let today = new Date();
+    let d = today.getDay();
+
+    if(today.getHours()>=11)
+	    greet=`Good afternoon, ${this.state.currLocale}`;
+    else
+      greet=`Good morning, ${this.state.currLocale}`;
 
     return (
       <div>
@@ -202,7 +210,7 @@ class App extends React.Component {
                 </ListItemText>
               </List>
             </Drawer>
-            <Typography className={classes.spacing} color='inherit'>Here's your weather for <span style={{textDecoration:'underline'}}>{this.state.currLocale}</span></Typography>
+            <Typography className={classes.spacing} color='inherit'>{greet}</Typography>
               <TextField 
                 inputProps={{maxLength:5}} 
                 className={'zip'} 
@@ -247,14 +255,14 @@ class App extends React.Component {
             data={this.state.chartData}
           />
         </div>
-        <Element curr={this.state.currTemp} high={this.state.currHigh} low={this.state.currLow} state={this.state.currState} title="Today's Weather"/>
+        <Element className={classes.curr} curr={this.state.currTemp} high={this.state.currHigh} low={this.state.currLow} state={this.state.currState} title="Today's weather"/>
 
         <Grid container justify='center' spacing={0} className={classes.forecast}>
           {
             Object.values(this.state.days).map(x=>
               {
                 //console.log(x);
-                if(d==6)
+                if(d===6)
                 {
                   d=0;
                 }
