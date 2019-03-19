@@ -64,9 +64,15 @@ class Element extends React.Component {
             <Typography variant="h6" component="h3">
               {this.props.title}
             </Typography>
-            <Typography variant="h6" component="h3">
-              {this.props.curr} °F
-            </Typography>
+            {
+              this.props.curr
+              ?
+              <Typography variant="h6" component="h3">
+                {this.props.curr} °F
+              </Typography>
+              :
+              null
+            }
             {
               this.props.high
               ?
