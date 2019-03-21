@@ -39,7 +39,7 @@ class Element extends React.Component {
   
   getImage()
   {
-    console.log(this.props.state);
+    //console.log(this.props.state);
     fetch(`https://api.giphy.com/v1/stickers/search?q=${this.props.state}&api_key=1936869e122e403a81f81326f1de0cfa&limit=1`)
     .then(res=>res.json())
     .then(res=>{

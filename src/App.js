@@ -2,11 +2,12 @@ import React from 'react';
 
 import { Toolbar, AppBar, Typography,
   List, Button, Divider, ListItem, ListItemText, Drawer,
-  TextField, Grid,
-} from '@material-ui/core'; 
+  TextField, Grid, Switch, FormControlLabel, FormGroup
+} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import './App.css';
+import logo from './apiLogo.jpg';
 
 //custom components
 import Element from './Components/Element'
@@ -54,8 +55,8 @@ class App extends React.Component {
       zip:"",
       lat:0,
       longi:0,
-      convert:0,
       left:false,
+      celsius:false,
       chartData:[
         {'name':'Min','data':{1:50,2:20,3:5,4:55,5:40}},
         {'name':'Max','data':{1:0,2:70,3:55,4:60,5:70}}
@@ -119,9 +120,61 @@ class App extends React.Component {
     }
   }
 
-  aniState()//get an image representing weather state
+  
+  switch(code,num)
   {
-    
+    if(code)
+    {
+      return(Math.round((num-32)*(5/9)*100)/100);//to celsius
+    }
+    else
+    {
+      return(Math.round((num*(9/5)+32)*100)/100);//to fahrenheit
+    }
+
+  }
+
+  convert(type)
+  {
+    let tempDay={};
+    let tempChart=[{},{}];
+    if(!type)
+    {
+      Object.keys(this.state.days).map(x=>
+        {
+          tempDay[x]=[ this.switch(1,this.state.days[x][0]),this.switch(1,this.state.days[x][1]) ];
+          tempChart[0][x]=this.switch(1,this.state.days[x][0]);
+          tempChart[1][x]=this.switch(1,this.state.days[x][1]);
+        });
+
+      this.setState({
+        celsius:!this.state.celsius,
+        days:tempDay,
+        chartData:[{'name':'Min','data':tempChart[1]},
+        {'name':'Max','data':tempChart[0]}],
+        currHigh:this.switch(1,this.state.currHigh),
+        currLow:this.switch(1,this.state.currLow),
+        currTemp:this.switch(1,this.state.currTemp)
+    });
+    }
+    else
+    {
+      Object.keys(this.state.days).map(x=>
+        {
+          tempDay[x]=[ this.switch(0,this.state.days[x][0]),this.switch(0,this.state.days[x][1]) ];
+          tempChart[0][x]=this.switch(0,this.state.days[x][0]);
+          tempChart[1][x]=this.switch(0,this.state.days[x][1]);
+        });
+      this.setState({
+        celsius:!this.state.celsius,
+        days:tempDay,
+        chartData:[{'name':'Min','data':tempChart[1]},
+          {'name':'Max','data':tempChart[0]}],
+        currHigh:this.switch(0,this.state.currHigh),
+        currLow:this.switch(0,this.state.currLow),
+        currTemp:this.switch(0,this.state.currTemp)
+      });
+    }
   }
 
   loadForecast(code,data)
@@ -160,12 +213,12 @@ class App extends React.Component {
     let max = 0;
 
     let cast={}
-    if(count===6)
-    {
-      count=0;
-    }
     for(var x in data.list)
     {
+      if(count===7)
+      {
+        count=0;
+      }
       if(parseInt(data.list[x].dt_txt[8]+data.list[x].dt_txt[9]) !== date)
       {
         if(iter===7)//get min/max temp within 8 iterations
@@ -173,7 +226,7 @@ class App extends React.Component {
           //console.log(max);
           castData[0][day[count]] = max;
           castData[1][day[count]] = min;
-          cast[day[count]] = [max,min]
+          cast[day[count]] = [max,min];
           min=111;
           max=0;
           count++;
@@ -241,27 +294,45 @@ class App extends React.Component {
                   </ListItemText>
                 </ListItem>
                 <Divider/>
-                <ListItemText>
-                  Kevin Gamez - 2019
-                </ListItemText>
+                <ListItem>
+                  <ListItemText>
+                    Kevin Gamez - 2019
+                  </ListItemText>
+                </ListItem>
+                <ListItem>
+                  <ListItemText>
+                    Powered with: <a href='https://openweathermap.org/api'><img style={{height:'auto',width:'1em'}} src={logo} alt='openWeatherMap-Logo'/></a> OpenWeatherMap
+                  </ListItemText>
+                </ListItem>
               </List>
             </Drawer>
-            <Typography className={classes.spacing} color='inherit'>{greet}</Typography>
-              <TextField 
-                inputProps={{maxLength:5}} 
-                className={'zip'} 
-                color='inherit' 
-                placeholder='Enter a Zipcode...'
-                value={this.state.zip}
-                onChange={this.handleChange}
-                onKeyDown={(e)=>{
-                if(e.keyCode===13)
-                {
-                  this.subZip();
-                }
-              }}
-              >
-              </TextField>
+            <Typography className={classes.spacing} color='inherit'>{greet}</Typography>&nbsp;
+           <FormGroup>
+             <FormControlLabel
+              label="Celsius"
+              control={
+                <Switch 
+                  onChange={()=>{this.convert(this.state.celsius)}}
+                  checked={this.state.celsius}
+                />
+              }
+             />
+           </FormGroup>
+            <TextField 
+              inputProps={{maxLength:5}} 
+              className={'zip'} 
+              color='inherit' 
+              placeholder='Enter a Zipcode...'
+              value={this.state.zip}
+              onChange={this.handleChange}
+              onKeyDown={(e)=>{
+              if(e.keyCode===13)
+              {
+                this.subZip();
+              }
+            }}
+            >
+            </TextField>
           </Toolbar>
         </AppBar>
         <div className={'chart'} style={{backgroundColor:'black'}}>
