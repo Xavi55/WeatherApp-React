@@ -27,12 +27,12 @@ const styles = {
     marginLeft: -18,
     marginRight: 10,
   },
-  curr:
+  /* curr:
   {
     height:'auto',
     width:'40%',
     margin:'1em'
-  },
+  } */
   forecast:
   {
     margin:'0 auto'
@@ -81,7 +81,7 @@ class App extends React.Component {
         currTemp:res.main.temp,
         currHigh:res.main.temp_max,
         currLow:res.main.temp_min,
-        currState:"There's "+res.weather[0].main+'.'
+        currState:res.weather[0].main
       });
     })
     .catch(e=>console.log(`ERR: Failed to fetch zip : ${e}`))
@@ -335,7 +335,7 @@ class App extends React.Component {
             </TextField>
           </Toolbar>
         </AppBar>
-        <div className={'chart'} style={{backgroundColor:'black'}}>
+        <div className={'chart'}>
           <AreaChart
             legend='left'
             ytitle="Temperature"
@@ -366,8 +366,9 @@ class App extends React.Component {
             data={this.state.chartData}
           />
         </div>
-        <Element className={classes.curr} curr={this.state.currTemp} high={this.state.currHigh} low={this.state.currLow} state={this.state.currState} title="Today's weather"/>
-
+        <div className={'curr'}>
+          <Element curr={this.state.currTemp} high={this.state.currHigh} low={this.state.currLow} state={this.state.currState} title="Today's weather"/>
+        </div>
         <Grid container justify='center' spacing={0} className={classes.forecast}>
           {
             Object.keys(this.state.days).map(x=>

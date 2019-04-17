@@ -4,6 +4,17 @@
   color:'white';
   width:8em;
 }
+.chart
+{
+  background-color: black;
+}
+@media screen and (min-width: 1000px)
+{
+  .curr
+  {
+    margin: 0 25%;
+  }
+}
 /*.App {
   text-align: center;
 }
