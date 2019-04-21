@@ -10,7 +10,8 @@ import './App.css';
 import logo from './apiLogo.jpg';
 
 //custom components
-import Element from './Components/Element'
+import Element from './Components/Element';
+import Gallery from './Components/Gallery';
 
 //charting components
 import ReactChartkick, { AreaChart } from 'react-chartkick';
@@ -265,6 +266,24 @@ class App extends React.Component {
   render() {
     const { classes } = this.props;
 
+    const images = [
+      {
+        original: 'http://lorempixel.com/1000/600/nature/1/',
+        thumbnail: 'http://lorempixel.com/250/150/nature/1/',
+        originalTitle: '#TITLE',
+        description: '#caption-here'
+      },
+      {
+        original: 'http://lorempixel.com/1000/600/nature/2/',
+        thumbnail: 'http://lorempixel.com/250/150/nature/2/'
+      },
+      {
+        original: 'http://lorempixel.com/1000/600/nature/3/',
+        thumbnail: 'http://lorempixel.com/250/150/nature/3/'
+      }
+    ]
+
+
     let greet = '';
     if(today.getHours()>=11)
 	    greet=`Good afternoon, ${this.state.currLocale}`;
@@ -377,6 +396,11 @@ class App extends React.Component {
               })
           }
         </Grid>
+        <div id='slide'>
+          <Gallery 
+            
+          />
+        </div>
       </div>
     );
   }

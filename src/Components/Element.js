@@ -13,7 +13,7 @@ const styles = theme => ({
     paddingBottom: theme.spacing.unit * 2,
     height:'auto',
     width:'auto',
-    margin:'1em',
+    margin:'0 .5em .5em',
     display:'flex'
   },
   spacing:
