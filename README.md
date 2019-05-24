@@ -6,4 +6,4 @@
 - Start it with `yarn start` or `npm run start`
 - Go to http://localhost:3000
 
-Served at : https://kevingamez.tk/WeatherApp-React/
+Served at : https://xavi55.github.io/WeatherApp-React/
