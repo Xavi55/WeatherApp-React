@@ -21,12 +21,16 @@
 {
   cursor: pointer;
 }
+.curr
+{
+  margin: 1% auto;
+}
 
 @media screen and (min-width: 1000px)
 {
   .curr
   {
-    margin: 0 25%;
+    margin: 1% 25%;
   }
 }
 @media screen and (max-width:1000px)

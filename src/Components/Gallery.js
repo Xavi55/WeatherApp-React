@@ -52,10 +52,11 @@ class Gallery extends React.Component {
     }
     link=(e)=>
     {
+      //gallery starts at one, so minus 1
       let indx = e.target.innerHTML[0];//innerHTML on HTMLnode= big help
       if(indx)
       {
-        let x = window.open(this.state.data[indx].url,'_blank');
+        let x = window.open(this.state.data[indx-1].url,'_blank');
         x.focus();
       }
       else{

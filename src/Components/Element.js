@@ -1,10 +1,9 @@
 import React from 'react';
 //import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Typography, Grid } from '@material-ui/core';
+import { Paper, Typography } from '@material-ui/core';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { resolve } from 'q';
 
 const styles = theme => ({
   root: {
@@ -95,7 +94,7 @@ class Element extends React.Component {
             <Typography variant='h6' component="h3">      
               {this.props.state}
             </Typography>
-            <img src={this.state.link} style={{height:'90px'}}/>
+            <img src={this.state.link} style={{height:'90px'}} alt={`${this.props.state}`}/>
             </div>
             :
             null

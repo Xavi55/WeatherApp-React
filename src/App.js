@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Toolbar, AppBar, Typography,
-  List, Button, Divider, ListItem, ListItemText, Drawer,
+  List, Divider, ListItem, ListItemText, Drawer,
   TextField, Grid, Switch, FormControlLabel, FormGroup
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
@@ -265,7 +265,7 @@ class App extends React.Component {
 
   render() {
     const { classes } = this.props;
-
+    /*demo images
     const images = [
       {
         original: 'http://lorempixel.com/1000/600/nature/1/',
@@ -282,7 +282,7 @@ class App extends React.Component {
         thumbnail: 'http://lorempixel.com/250/150/nature/3/'
       }
     ]
-
+    */
 
     let greet = '';
     if(today.getHours()>=11)
