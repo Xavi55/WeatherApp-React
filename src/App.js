@@ -304,7 +304,7 @@ class App extends React.Component {
                 </ListItem>
                 <ListItem>
                   <ListItemText>
-                    Visit my website <a href='https://xavi55.github.io.' target='_blank' rel='noopener noreferrer'>here</a>
+                    Visit my website <a href='https://xavi55.github.io/webDos' target='_blank' rel='noopener noreferrer'>here</a>
                   </ListItemText>
                 </ListItem>
                 <ListItem>
@@ -386,13 +386,13 @@ class App extends React.Component {
           />
         </div>
         <div className={'curr'}>
-          <Element curr={this.state.currTemp} high={this.state.currHigh} low={this.state.currLow} state={this.state.currState} title="Today's weather"/>
+          <Element curr={this.state.currTemp} high={this.state.currHigh} low={this.state.currLow} state={this.state.currState} celOn={this.state.celsius} title="Today's weather"/>
         </div>
         <Grid container justify='center' spacing={0} className={classes.forecast}>
           {
             Object.keys(this.state.days).map(x=>
               {
-                return(<Grid item key={x}><Element title={x} high={this.state.days[x][0]} low={this.state.days[x][1]} /></Grid>)
+                return(<Grid item key={x}><Element title={x} high={this.state.days[x][0]} low={this.state.days[x][1]} celOn={this.state.celsius} /></Grid>)
               })
           }
         </Grid>

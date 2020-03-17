@@ -67,7 +67,7 @@ class Element extends React.Component {
               this.props.curr
               ?
               <Typography variant="h6" component="h3">
-                {this.props.curr} °F
+                {this.props.curr} °{this.props.celOn?'C':'F'}
               </Typography>
               :
               null
@@ -75,14 +75,14 @@ class Element extends React.Component {
             {
               this.props.high
               ?
-              <Typography component='p'>Max: {this.props.high} °F</Typography>
+              <Typography component='p'>Max: {this.props.high} °{this.props.celOn?'C':'F'}</Typography>
               :
               null
             }
             {
               this.props.low
               ?
-              <Typography component='p'>Min :{this.props.low} °F</Typography>
+              <Typography component='p'>Min :{this.props.low} °{this.props.celOn?'C':'F'}</Typography>
               :
               null
             }
