@@ -92,7 +92,7 @@ class Gallery extends React.Component {
           showPlayButton={false}
           showThumbnails={false} 
           showBullets={true}
-          showNav={false}
+          showNav={true}
           slideInterval={6000} 
           autoPlay 
           onClick={this.link.bind(this)}
