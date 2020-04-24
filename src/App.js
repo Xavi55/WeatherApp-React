@@ -117,11 +117,17 @@ const [ state, setState ] =useState(
 			fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${state.zip}&units=imperial&appid=81bf6ab8b40197439ba85fbc537fbaac`)
 			.then(res=>res.json())
 			.then(res=>{
-				updateField('currLocale',res.name+', '+res.sys.country)
-				updateField('currTemp',res.main.temp)
-				updateField('currHigh',res.main.temp_max)
-				updateField('currLow',res.main.temp_min)
-				updateField('currState',res.weather[0].main)
+				setState(prev=>
+					{
+						return{
+							...prev,
+							['currLocale']:res.name+', '+res.sys.country,
+							['currTemp']:res.main.temp,
+							['currHigh']:res.main.temp_max,
+							['currLow']:res.main.temp_min,
+							['currState']:res.weather[0].main
+						}
+					})
 			})
 			.catch(e=>console.log(`ERR: Failed to fetch zip : ${e}`))
 			loadForecast(1,state.zip);
@@ -130,8 +136,14 @@ const [ state, setState ] =useState(
 		{
 			alert('Not a proper zipcode!')
 		}
-		updateField('zip','');//clear
-	}
+		setState(prev=>
+			{
+				return{
+					...prev,
+					['zip']:''
+				}
+			});
+	}//clear
 	
 	const loadForecast=(code,data)=>
   	{
@@ -149,6 +161,7 @@ const [ state, setState ] =useState(
 				fetch(`https://api.openweathermap.org/data/2.5/forecast?zip=${data}&units=imperial&appid=81bf6ab8b40197439ba85fbc537fbaac`)
 				.then(res=>res.json())
 				.then(res=>{
+					console.log('zipcode')
 					procData(res);
 				})
 				.catch(e=>console.log(`ERR: Failed to fetch forecast : ${e}`));
@@ -160,59 +173,57 @@ const [ state, setState ] =useState(
 
 	const procData=(data)=>
 	{
-		let count=today.getDay()+1;
-		//let castData = {};
-		let castData = [{},{}];
-		let date = today.getDate();
-		let iter = 0;
-		let min = 111;
-		let max = 0;
-
+		let count=today.getDay()+1
+		let date = today.getDate()
+		let castData = [{},{}]
+		let min = 111
+		let max = 0
 		let cast={}
+		//console.log(count)
+		//console.log('forecast',data)
 		for(var x in data.list)
 		{
 			if(count===7)
 			{
 				count=0;
 			}
-			if(parseInt(data.list[x].dt_txt[8]+data.list[x].dt_txt[9]) !== date)
+			if(parseInt(data.list[x].dt_txt[8]+data.list[x].dt_txt[9]) === date)
 			{
-				if(iter===7)//get min/max temp within 8 iterations
-				{
-					//console.log(max);
-					castData[0][day[count]] = max;
-					castData[1][day[count]] = min;
-					cast[day[count]] = [max,min];
-					min=111;
-					max=0;
-					count++;
-					iter=0;
-				}
-				else
-				{
-					if( data.list[x].main.temp > max )
-					{
-						max = data.list[x].main.temp;
-					}
-						if( data.list[x].main.temp < min )
-					{
-						min = data.list[x].main.temp
-					}
-					iter++;
-				}
+				//skip todays weather data
+				continue
 			}
-			//console.log(data.list[x]);
-			if(parseInt(data.list[x].dt_txt[11]+data.list[x].dt_txt[12])===12)
+			
+			//find min/max temp in this interval
+			if(parseInt(data.list[x].dt_txt[11]+data.list[x].dt_txt[12])>=0 && parseInt(data.list[x].dt_txt[11]+data.list[x].dt_txt[12])<=18)
 			{
-				castData[day[count]] = data.list[x].main.temp
-				count++;
-			} 
+				if(min>data.list[x].main.temp_min)
+				{
+					min=data.list[x].main.temp_min
+				}
+				if(max<data.list[x].main.temp_max)
+				{
+					max=data.list[x].main.temp_max
+				}
+				//castData[0][day[count]] = data.list[x].main.temp_min
+				//castData[1][day[count]] = data.list[x].main.temp_max
+			}
+			//new day after 6pm, reset vars
+			if(parseInt(data.list[x].dt_txt[11]+data.list[x].dt_txt[12])===18)
+			{
+				castData[0][day[count]]=min
+				castData[1][day[count]]=max
+				cast[day[count]]=[min,max]
+				min=111
+				max=0
+				count++
+			}
 		}
+		//console.log(castData)
 		setState(prev=>{
 			return{
 				...prev,
-				['chartData']:[{'name':'Min','data':castData[1]},
-					{'name':'Max','data':castData[0]}],
+				['chartData']:[{'name':'Min','data':castData[0]},
+					{'name':'Max','data':castData[1]}],
 				['days']:cast
 			}
 		})
@@ -304,7 +315,7 @@ const [ state, setState ] =useState(
 					</ListItem>
 				</List>
 				</Drawer>
-				<Typography className={styles.spacing} color='inherit'>{greet}</Typography>&nbsp;
+				<Typography style={{display:'flex',flexGrow:'1'}} className={styles.spacing} color='inherit'>{greet}</Typography>&nbsp;
 			<FormGroup>
 				<FormControlLabel
 				label="Celsius"
@@ -324,10 +335,10 @@ const [ state, setState ] =useState(
 				value={state.zip}
 				onChange={(e)=>updateField('zip',e.target.value)}
 				onKeyDown={(e)=>{
-				if(e.keyCode===13)
-				{
-					subZip();
-				}
+					if(e.keyCode===13)
+					{
+						subZip();
+					}
 				}}
 				>
 				</TextField>
@@ -378,7 +389,16 @@ const [ state, setState ] =useState(
 			{
 				Object.keys(state.days).map(x=>
 				{
-					return(<Grid item key={x}><Element title={x} high={state.days[x][0]} low={state.days[x][1]} celOn={state.celsius} /></Grid>)
+					return(
+						<Grid item key={x}>
+							<Element 
+								title={x}
+								low={state.days[x][0]}
+								high={state.days[x][1]}
+								celOn={state.celsius}
+							/>
+						</Grid>
+					)
 				})
 			}
 			</Grid>

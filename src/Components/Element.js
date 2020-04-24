@@ -39,13 +39,16 @@ class Element extends React.Component {
   getImage()
   {
     //console.log(this.props.state);
-    fetch(`https://api.giphy.com/v1/stickers/search?q=${this.props.state}&api_key=1936869e122e403a81f81326f1de0cfa&limit=1`)
-    .then(res=>res.json())
-    .then(res=>{
-      this.setState({link:res.data[0].images.downsized_medium.url});
-      //console.log(res.data[0].images.downsized_medium.url);
-    })
-    .catch(e=>{console.log(`Failed to fetch image : ${e}`)})
+    if(this.props.state!='#state')
+    {
+      fetch(`https://api.giphy.com/v1/stickers/search?q=${this.props.state}&api_key=1936869e122e403a81f81326f1de0cfa&limit=1`)
+      .then(res=>res.json())
+      .then(res=>{
+        this.setState({link:res.data[0].images.downsized_medium.url});
+        //console.log(res.data[0].images.downsized_medium.url);
+      })
+      .catch(e=>{console.log(`Failed to fetch image : ${e}`)})
+    }
   }
 
   componentWillReceiveProps()
