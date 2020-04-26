@@ -20,7 +20,8 @@ ReactChartkick.addAdapter(Chart);
 
 //81bf6ab8b40197439ba85fbc537fbaac
 
-function App(){
+function App()
+{
 	const styles = {
 		spacing:{
 		  flexGrow: 1,
@@ -328,18 +329,18 @@ const [ state, setState ] =useState(
 				/>
 			</FormGroup>
 				<TextField 
-				inputProps={{maxLength:5}} 
-				className={'zip'} 
-				color='inherit' 
-				placeholder='Enter a Zipcode...'
-				value={state.zip}
-				onChange={(e)=>updateField('zip',e.target.value)}
-				onKeyDown={(e)=>{
-					if(e.keyCode===13)
-					{
-						subZip();
-					}
-				}}
+					inputProps={{maxLength:5}} 
+					className={'zip'} 
+					color='inherit' 
+					placeholder='Enter a Zipcode...'
+					value={state.zip}
+					onChange={(e)=>updateField('zip',e.target.value)}
+					onKeyDown={(e)=>{
+						if(e.keyCode===13)
+						{
+							subZip();
+						}
+					}}
 				>
 				</TextField>
 			</Toolbar>

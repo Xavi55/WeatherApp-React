@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 //carosel component
 import ImageGallery from 'react-image-gallery';
 import "../../node_modules/react-image-gallery/styles/css/image-gallery.css";
@@ -6,35 +6,29 @@ import "../../node_modules/react-image-gallery/styles/css/image-gallery.css";
 const request = require('request-promise');
 const cheerio = require('cheerio');
 
-class Gallery extends React.Component {
-    constructor(props)
+function Gallery()
+{
+	const [ data, setData ] = useState([])
+    const getData=async()=>
     {
-      super(props);
-      this.state={
-        data:[]
-        }
-    }
-
-    async getData()
-    {
-      let base = 'https://weather.com/'
-      let html = await request(base);
-      const $ = cheerio.load(html);
-      //let x = $('.wx-media-object-inner a').text();
-      let img = $('img.image');
-      let link = $('a.wx-media-image');
-      //let x = $('.wx-media-content a').text();
-      let text = $('div.wx-ellipsis-inner');
-      let data=[];
-      for(var i=0;i<8;i++)
-      {
-        let indx = i+1;
-        data.push({
-          original:img[i].attribs.src,
-          description:indx+': '+text[i].firstChild.firstChild.data,
-          url:base+link[i].attribs.href
-        });
-      }
+		let base = 'https://weather.com/'
+		let html = await request(base);
+		const $ = cheerio.load(html);
+		//let x = $('.wx-media-object-inner a').text();
+		let img = $('img.image');
+		let link = $('a.wx-media-image');
+		//let x = $('.wx-media-content a').text();
+		let text = $('div.wx-ellipsis-inner');
+		let data=[];
+		for(var i=0;i<8;i++)
+		{
+		let indx = i+1;
+		data.push({
+			original:img[i].attribs.src,
+			description:indx+': '+text[i].firstChild.firstChild.data,
+			url:base+link[i].attribs.href
+		});
+		}
       //console.log(data)
       /* let data = img.map(indx=>
         {
@@ -46,30 +40,27 @@ class Gallery extends React.Component {
           });
         }); */
       //console.log(text)
-      this.setState({data:data});
+		setData(data);
       //console.log(text[0].firstChild.firstChild.data);
       //console.log(img[0].attribs.src);
     }
-    link=(e)=>
+    const link=(e)=>
     {
-      //gallery starts at one, so minus 1
-      let indx = e.target.innerHTML[0];//innerHTML on HTMLnode= big help
-      if(indx)
-      {
-        let x = window.open(this.state.data[indx-1].url,'_blank');
-        x.focus();
-      }
-      else{
-        console.log('pass');
-      }
-    }
-    componentDidMount()
-    {
-      console.log('mount')
-      this.getData();
-    }
-
-    render() {
+		//gallery starts at one, so [ data[-1] ]
+		let indx = e.target.innerHTML[0];//innerHTML on HTMLnode= big help
+		if(indx)
+		{
+			let x = window.open(data[indx-1].url,'_blank');
+			x.focus();
+		}
+		else
+		{
+			console.log('pass');
+		}
+	}
+	useEffect(()=>{
+		getData()
+	},[])
     /* const images = [
       {
         original: 'https://s.w-x.co/primary_summer.jpg',
@@ -85,19 +76,18 @@ class Gallery extends React.Component {
       }
     ] 
     */
-      return (
-        <ImageGallery 
-          items={this.state.data} 
-          showFullscreenButton={false} 
-          showPlayButton={false}
-          showThumbnails={false} 
-          showBullets={true}
-          showNav={true}
-          slideInterval={6000} 
-          autoPlay 
-          onClick={this.link.bind(this)}
-        />
-      );
-    }
-  }
-  export default Gallery;
+	return (
+		<ImageGallery 
+			items={data} 
+			showFullscreenButton={false} 
+			showPlayButton={false}
+			showThumbnails={false} 
+			showBullets={true}
+			showNav={true}
+			slideInterval={6000} 
+			autoPlay 
+			onClick={(e)=>link(e)}
+		/>
+	)
+}
+export default Gallery;
