@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState,useEffect }from 'react';
 //import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography } from '@material-ui/core';
@@ -28,84 +28,77 @@ const theme = createMuiTheme({
   typography: { useNextVariants: true },
 });
 
-class Element extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      link:""
-    };
-  }
-  
-  getImage()
+function Element(props)
+{
+  const [link, setLink ]=useState('')
+  useEffect(()=>
+  {
+    getImage()
+  },[])
+  /* componentWillReceiveProps()
+  {
+    this.getImage()
+  } */
+  const getImage=()=>
   {
     //console.log(this.props.state);
-    if(this.props.state!='#state')
+    if(props.state!=='#state')
     {
-      fetch(`https://api.giphy.com/v1/stickers/search?q=${this.props.state}&api_key=1936869e122e403a81f81326f1de0cfa&limit=1`)
+      fetch(`https://api.giphy.com/v1/stickers/search?q=${props.state}&api_key=1936869e122e403a81f81326f1de0cfa&limit=1`)
       .then(res=>res.json())
       .then(res=>{
-        this.setState({link:res.data[0].images.downsized_medium.url});
+        setLink(res.data[0].images.downsized_medium.url);
         //console.log(res.data[0].images.downsized_medium.url);
       })
       .catch(e=>{console.log(`Failed to fetch image : ${e}`)})
     }
   }
-
-  componentWillReceiveProps()
-  {
-    this.getImage()
-  }
-  render() {
-
-    const { classes } = this.props;
-
-    return (
+    const { classes } = props;
+    return(
       <MuiThemeProvider theme={theme}>
         <Paper className={classes.root} elevation={1}>
           <div className={classes.spacing}>
             <Typography variant="h6" component="h3">
-              {this.props.title}
+              {props.title}
             </Typography>
             {
-              this.props.curr
+              props.curr
               ?
               <Typography variant="h6" component="h3">
-                {this.props.curr} °{this.props.celOn?'C':'F'}
+                {props.curr} °{props.celOn?'C':'F'}
               </Typography>
               :
               null
             }
             {
-              this.props.high
+              props.high
               ?
-              <Typography component='p'>Max: {this.props.high} °{this.props.celOn?'C':'F'}</Typography>
+              <Typography component='p'>Max: {props.high} °{props.celOn?'C':'F'}</Typography>
               :
               null
             }
             {
-              this.props.low
+              props.low
               ?
-              <Typography component='p'>Min :{this.props.low} °{this.props.celOn?'C':'F'}</Typography>
+              <Typography component='p'>Min :{props.low} °{props.celOn?'C':'F'}</Typography>
               :
               null
             }
           </div>
           {
-            this.props.state
+            props.state
             ?
             <div>
             <Typography variant='h6' component="h3">      
-              {this.props.state}
+              {props.state}
             </Typography>
-            <img src={this.state.link} style={{height:'90px'}} alt={`${this.props.state}`}/>
+            <img src={link} style={{height:'90px'}} alt={`${props.state}`}/>
             </div>
             :
             null
           }
         </Paper>
     </MuiThemeProvider>
-    );
+    )
   }
-}
-
 export default withStyles(styles)(Element);

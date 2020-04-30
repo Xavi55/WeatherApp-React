@@ -9,12 +9,13 @@ const cheerio = require('cheerio');
 function Gallery()
 {
 	const [ data, setData ] = useState([])
-    const getData=async()=>
+    const getData= async()=>
     {
 		let base = 'https://weather.com/'
 		let html = await request(base);
 		const $ = cheerio.load(html);
 		//let x = $('.wx-media-object-inner a').text();
+		let element=$('div.mediaListItem')
 		let img = $('img.image');
 		let link = $('a.wx-media-image');
 		//let x = $('.wx-media-content a').text();
@@ -22,12 +23,12 @@ function Gallery()
 		let data=[];
 		for(var i=0;i<8;i++)
 		{
-		let indx = i+1;
-		data.push({
-			original:img[i].attribs.src,
-			description:indx+': '+text[i].firstChild.firstChild.data,
-			url:base+link[i].attribs.href
-		});
+			let indx = i+1;
+			data.push({
+				original:img[i].attribs.src,
+				description:indx+': '+text[i].firstChild.firstChild.data,
+				url:base+link[i].attribs.href
+			});
 		}
       //console.log(data)
       /* let data = img.map(indx=>
