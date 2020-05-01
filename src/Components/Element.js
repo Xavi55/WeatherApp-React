@@ -34,15 +34,14 @@ function Element(props)
   useEffect(()=>
   {
     getImage()
-  },[])
+  },[props.state])
   /* componentWillReceiveProps()
   {
     this.getImage()
   } */
-  const getImage=()=>
+  const getImage= async()=>
   {
-    //console.log(this.props.state);
-    if(props.state!=='#state')
+    if(props.state!=='#state' && props.state)
     {
       fetch(`https://api.giphy.com/v1/stickers/search?q=${props.state}&api_key=1936869e122e403a81f81326f1de0cfa&limit=1`)
       .then(res=>res.json())

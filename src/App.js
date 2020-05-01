@@ -404,7 +404,7 @@ const [ state, setState ] =useState(
 			}
 			</Grid>
 			<div id='slide'>
-				{<Gallery />}
+				<Gallery />
 			</div>
 		</div>
 	)
