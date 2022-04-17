@@ -17,7 +17,7 @@ function Gallery()
 		let link=$('a.mediaLink')
 		let img=$('a.mediaLink img')
 		let text=$('a.mediaLink span')
-		console.log("text",text)
+		//console.log("text",text)
 		let data=[];
 		for(var i=0;i<8;i++)
 		{
