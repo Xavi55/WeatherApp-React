@@ -16,8 +16,8 @@ function Gallery()
 		const $ = cheerio.load(html)
 		let link=$('a.mediaLink')
 		let img=$('a.mediaLink img')
-		let text=$('a.mediaLink h3 span')
-		//console.log(text)
+		let text=$('a.mediaLink span')
+		console.log("text",text)
 		let data=[];
 		for(var i=0;i<8;i++)
 		{
